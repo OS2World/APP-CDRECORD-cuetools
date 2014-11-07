@@ -1,0 +1,16 @@
+# example ~/.cuerenamerc file
+
+# only lower case
+case=lower
+# replace spaces with underscores (could also use replace= /_)
+underscore
+# only allow alphnumeric and '_' in fields
+strict=_
+# replace '-' with '_' (otherwise it would get deleted)
+replace=-/_
+replace=&/and
+# this will rename files to the form:
+# 01-artist_name-track_title[.ext]
+template=%n - %a - %t%.%F
+# don't rename anything (specify "-o notest" to override)
+test

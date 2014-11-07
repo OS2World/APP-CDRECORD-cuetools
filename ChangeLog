@@ -1,0 +1,66 @@
+2003-11-19
+- cuetools-0.1 (initial release)
+2003-11-20
+- code cleanup
+- option changes
+- programs can now get input from stdin and output to stdout
+2003-11-21
+- rewrite of cdtext code
+2003-11-22
+- removed unused getopt variables
+- combined filename/format into single struct
+2003-11-23
+- spelling corrections
+- cuetools-0.2
+- renamed toc structure cd, seperated
+- CD-TEXT block isn't printed for toc file if there was no CD-TEXT info found in
+source file (this check will not work if there were CD-TEXT keywords with
+invalid info)
+- correction to cuerename's -o options description in README
+- cue.c code cleanup
+2003-11-24
+- cdtext.c segfault fix if NULL value is passed to cdtext_set ()
+- documentation wrapped to 80 columns
+- added EXAMPLE, showing an example useage
+2003-11-24
+- spelling corrections to README
+2003-11-25
+- stricter handling of option errors
+2003-12-12
+- programs exit if cue/toc file is ambiguous
+- programs exit on file open error (avoids segfault)
+- toc ISRC (non CD-TEXT) entry should be quoted
+- description of cue/toc file formats written
+- parsing errors list line numbers
+- fixed segfault when writing cue file with no initial filename
+2003-12-13
+- cuetools-0.3
+2003-12-16
+- fixed segfault when writing cuefile with no CD-TEXT
+2003-12-18
+- fixed MODE2/RAW in cue file parsing
+2003-12-22
+- cuerename - allowable chars can be set on the command line (strict="chars")
+- programs print useage if run without any arguments
+- verbose prints to stdout not stderr
+2003-12-29
+- cuerename - changes to options (removed lower, upper; added
+case=none|lower|upper, nostrict, notest)
+- cuerename - added option file ~/.cuerenamerc
+- cuetools-0.4
+2004-01-15
+- cuerename - fixed bug that was causing original filenames to be modified
+- cuerename - added "replace=FROM/TO" option
+- cuerename - improved file prefix/suffix code
+- cuerename - neither %f or %F contain a '.' now (strict was getting rid of
+this in some cases).  added a %. which expands to a '.' if the filename had
+one.  '%f%.%F' will expand to original filename, with formatting applied to
+prefix and suffix.
+- cuerename - allow for comments (lines beginning with '#') in option file
+- cuerename - added an escape character '\' to replace, so replacing a '/' is
+possible
+- cuetools-0.5
+2004-01-19
+- CATALOG field should not be quoted for cue files.  Updated cue.c and
+formats.
+- cuetools-0.5.1

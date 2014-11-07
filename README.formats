@@ -1,0 +1,191 @@
+Description of the Cuesheet/TOC File Formats
+--------------------------------------------
+
+The Cuesheet (cue) and TOC (toc) file formats both describe the layout of a CD.
+ Each has an (optional) global section, followed by any number of track
+sections.
+
+Lines (with a few exceptions for the toc format) begin with a keyword, which
+may be followed by whitespace separated fields.  Lines which begin with a
+keyword which is not recognized produce a warning and are ignored.  Some
+keywords are only allowed in the global section or a track section.  If these
+keywords show up in an inappropriate section, they produce a warning, and the
+line is ignored.
+
+Format Notes
+If a keyword does not have a format entry, it should be the only field on a
+line.  Other notation:
+<field> - required field
+[field] - optional field
+... - preceding field may be repeated any number of times
+
+Cuesheet Format
+
+Comments
+All lines beginning with "REM" are considered comments.  "REM" is considered a
+keyword, and lines beginning with this keyword are ignored.
+
+Keywords
+REM
+	Section(s): any
+	Format: REM [comments]
+	See Comments section.
+CATALOG
+	Section(s): global
+	Format: CATALOG <catalog_number>
+	Sets the catalog number  of the CD.  The catalog_number must be exactly
+	13 digits.
+FILE
+	Section(s): track
+	Format: FILE "<filename>" [file_format]
+	Sets a new input file.  FILE line precedes the beginning of the track
+	section.  Allowable file_format entries are BINARY, MOTOROLA, AIFF,
+	WAVE, or MP3.
+TRACK
+	Section(s): track
+	Format: TRACK <track_number> <track_mode>
+	Starts a new track.  track_number must be a positive integer.
+	Allowable track_mode entries are MODE1/2048, MODE1/2352, MODE2/2336,
+	MODE2/2048, MODE2/2324, MODE2/2336, or MODE2/2352.
+FLAGS
+	Section(s): track
+	Format: FLAGS [flag]...
+	Sets track flags.  Allowable flag entries are PRE, DCP, 4CH, and SCMS.
+ISRC
+	Section(s): track
+	Format: ISRC <ISRC_number>
+	Sets track ISRC number.  ISRC_number must be of the format
+	CCOOOOYYSSSSS.
+PREGAP
+	Section(s): track
+	Format: PREGAP <pregap>
+	Sets track pregap.  pregap must be in mm:ss:ff format.
+INDEX
+	Section(s): track
+	Format: INDEX <index_number> <index>
+	Sets a track index.  index_number must be a non-negative integer.
+	index must be in mm:ss:ff format.
+(CD-TEXT keywords)
+	Section(s): any
+	See CD-TEXT section.
+
+
+TOC File Format
+Certain keywords begin a block, which must be enclosed between `{' and `}'
+brackets.
+
+Comments
+Comments begin with "//" and may be placed anywhere.  Because they can be
+placed anywhere in a line, toc comments are treated as a special case (not as a
+keyword).  Any text beginning with "//" is stripped from each line.
+
+Keywords
+CATALOG
+	Section(s): global
+	Format: CATALOG "<catalog_number>"
+	Sets the catalog number  of the CD.  The catalog_number must be exactly
+	13 digits.
+CD_DA
+	Section(s): global
+	Sets the CD format to audio.
+CD_ROM
+	Section(s): global
+	Sets the CD format to data.
+CD_ROM_XA
+	Section(s): global
+	Sets the CD format to mixed.
+TRACK
+	Section(s): track
+	Format: TRACK <track_mode> [sub_channel_mode]
+NO
+	Section(s): track
+	Format: NO <flag>
+	Negates (clears) track flags.  Allowable flags are "COPY" and
+	"PRE_EMPHASIS".
+COPY
+	Section(s): track
+	Sets the copy permitted flag.
+PRE_EMPHASIS
+	Section(s): track
+	Sets the pre-emphasis flag.
+TWO_CHANNEL_AUDIO
+	Section(s): track
+	Sets the two channel audio flag.
+FOUR_CHANNEL_AUDIO
+	Section(s): track
+	Sets the four channel audio flag.
+ISRC
+	Section(s): track
+	Format: ISRC "<ISRC_number>"
+	Sets track ISRC number.  ISRC_number must be of the format
+	CCOOOOYYSSSSS.
+SILENCE
+	Section(s): track
+	Ignored
+ZERO
+	Section(s): track
+	Ignored
+FILE
+	Section(s): track
+	Format: FILE "<filename>" <start> [length]
+	Add file to current track.  start and length must be in mm:ss:ff format.
+AUDIOFILE
+	Section(s): track
+	Format: AUDIOFILE "<filename>" <start> [length]
+	Add file to current track.  start and length must be in mm:ss:ff format.
+DATAFILE
+	Section(s): track
+	Ignored
+FIFO
+	Section(s): track
+	Ignored
+START
+	Section(s): track
+	Format: START <start>
+PREGAP
+	Section(s): track
+	Format: PREGAP <pregap>
+	Sets track pregap.  pregap must be in mm:ss:ff format.
+INDEX
+	Section(s): track
+	Format: INDEX <index_number> <index_time>
+	Sets a track index.  index_number must be a non-negative integer.
+	index_time must be in mm:ss:ff format.
+CD_TEXT
+	Section(s): any
+	Format: CD_TEXT {}
+	Begins a CD_TEXT block.
+LANGUAGE_MAP
+	Section(s): global
+	Subsection(s): CD_TEXT block
+	Format: LANGUAGE_MAP {}
+	Begins a LANGUAGE_MAP block.
+LANGUAGE
+	Section(s): track
+	Subsection(s): CD_TEXT block
+	Format: LANGUAGE {}
+	Begins a LANGUAGE block.
+(CD-TEXT keywords)
+	Section(s): any
+	Subsection(s): CD-TEXT block
+	See CD-TEXT section.
+
+
+CD-TEXT
+
+Format: <CDTEXT_keyword> "<CDTEXT_field>"
+
+Keywords
+TITLE
+PERFORMER
+SONGWRITER
+COMPOSER
+ARRANGER
+MESSAGE
+DISC_ID
+GENRE
+TOC_INFO
+TOC_INFO2
+UPC_EAN
+ISRC
+SIZE_INFO

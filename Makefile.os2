@@ -1,0 +1,94 @@
+# Makefile.os2
+
+include Makefile.os2.config
+
+MY_MAKEFLAGS =	-f Makefile.os2
+
+CUETOOLS_EXES =	cueconvert.exe cuerename.exe cuebreakpoints.exe
+CUETOOLS_DOCS =	COPYING EXAMPLE.cuerenamerc EXAMPLE.useage README \
+		README.formats
+
+CLEAN_FILES =	Package/ $(CUETOOLS_EXES) $(CONV_OBJS) $(RENAME_OBJS) $(BREAK_OBJS)
+
+SRCS =		msf.c cue.c cd.c cdtext.c strcasecmp.c getsubopt.c
+
+CONV_SRCS =	$(SRCS) cueconvert.c
+
+RENAME_SRCS =	$(SRCS) cuerename.c
+
+BREAK_SRCS =	$(SRCS) cuebreakpoints.c
+
+CONV_OBJS =	$(CONV_SRCS:.c=.o)
+
+RENAME_OBJS =	$(RENAME_SRCS:.c=.o)
+
+BREAK_OBJS =	$(BREAK_SRCS:.c=.o)
+
+# Rules
+
+.SUFFIXES:	.c .o
+
+.c.o:		
+		$(CC) $(CFLAGS) -o $@ -c $<
+
+# Targets
+
+all:		$(CUETOOLS_EXES)
+
+cueconvert.exe:	$(CONV_OBJS)
+		$(LD) $(LDFLAGS) -o $@ $(CONV_OBJS) $(LIBS)
+
+cuerename.exe:	$(RENAME_OBJS)
+		$(LD) $(LDFLAGS) -o $@ $(RENAME_OBJS) $(LIBS)
+
+cuebreakpoints.exe:	$(BREAK_OBJS)
+		$(LD) $(LDFLAGS) -o $@ $(BREAK_OBJS) $(LIBS)
+
+check:		all
+
+install-files:	all
+		@if test ! -e $(BINDIR); then \
+			echo "Creating directory $(BINDIR) ..."; \
+			mkdir -p $(BINDIR); \
+		fi; \
+		for CUETOOLS_EXE in $(CUETOOLS_EXES); do \
+			echo "$$CUETOOLS_EXE -> $(BINDIR)/$$CUETOOLS_EXE"; \
+			cp $$CUETOOLS_EXE $(BINDIR)/$$CUETOOLS_EXE; \
+		done; \
+		if test ! -e $(DATADIR); then \
+			echo "Creating directory $(DATADIR) ..."; \
+			mkdir -p $(DATADIR); \
+		fi; \
+		for DOCS_FILE in $(CUETOOLS_DOCS); do \
+			echo "$$DOCS_FILE -> $(DATADIR)/$$DOCS_FILE"; \
+			cp $$DOCS_FILE $(DATADIR)/$$DOCS_FILE; \
+		done;
+
+clean:		
+		rm -rf $(CLEAN_FILES)
+
+# Automates package creation
+
+package:	
+		@$(MAKE) $(MY_MAKEFLAGS) PREFIX=`pwd`/Package/usr install-files
+
+binary-zip:	package
+		@cd Package; \
+		$(ZIP) $(ZIPFLAGS) -r ../$(ARCHIVE_BIN_ZIP) *; \
+		cd ..
+
+binary-ux2:	package
+		@cd Package; \
+		$(ZIP) $(ZIPFLAGS) -r ../$(ARCHIVE_UX2_ZIP) *; \
+		cd ../os2; \
+		$(ZIP) $(ZIPFLAGS) ../$(ARCHIVE_UX2_ZIP) PKGINFO; \
+		cd ..;
+
+source-zip:	
+		@MY_DIR=`basename \`pwd\``; \
+		cd ..; \
+		$(ZIP) $(ZIPFLAGS) -r $(ARCHIVE_SRC_ZIP) $$MY_DIR/; \
+		cd $$MY_DIR;
+
+# Dependencies
+

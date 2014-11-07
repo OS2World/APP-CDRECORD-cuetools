@@ -1,0 +1,40 @@
+Example Usage of cuetools with Cdparanoia, Cdrdao, Flac, shntool, and Lame
+--------------------------------------------------------------------------
+
+First we rip a copy of "A Tribute to Curtis Mayfield" under Linux using
+Cdparanoia (for extracting the audio) and Cdrdao (for getting the TOC
+information).  We end up with two files: va-curtis_mayfield.wav (audio) and
+va-curtis_mayfield.toc (toc file).
+
+Because many programs (including Flac) only support the cuesheet format, we
+convert the toc file.
+
+% cueconvert -f va-curtis_mayfield.toc -f va-curtis_mayfield.cue
+
+We encode the wav file using Flac, because it is too large to fit on a CDROM
+(Flac also offers md5 checking).
+
+% flac --cuesheet=va-curtis_mayfield.cue va-curtis_mayfield.wav
+
+Now we want to make a mp3 file for each track.  The first step is step is
+splitting the Flac file on track boundaries.
+
+% cuebreakpoints -f va-curtis_mayfield.toc | shnsplit va-curtis_mayfield.flac
+
+There are now 17 wav files named split-track01.wav through split-track17.wav.
+These filenames aren't very descriptive, so we rename them.
+
+% cuerename -o underscore,lower,strict,template="%n-%a-%t%F" -f va-curtis_mayfield.toc split-track??.wav
+
+Now the filenames are:
+01-gladys_knight-choice_of_colors.wav
+02-steve_winwood-its_all_right.wav
+03-repercussions_and_c_mayfield-lets_do_it_again.wav
+...
+17-elton_john_and_the_sounds_of_blackness-amen.wav
+
+Now running Lame on the wav files to encode them to mp3 format.
+
+% lame --nogap *.wav
+
+We finally have the album in mp3 format with descriptive filenames.

@@ -1,0 +1,107 @@
+cuetools
+--------
+
+DESCRIPTION
+cuetools is a set of utilities for working with cue files and toc files.
+
+COMMON OPTIONS
+-t cue|toc		set file type to cue or toc
+-f <file>		specify cue/toc file
+
+cue/toc files are specified using -f <file>.  <file> can be specified as "-" to
+indicate stdin for input files, and stdout for output files.  If <file> does
+not have a ".cue" or ".toc" suffix, or is "-", the file type must be specified
+using -t cue|toc.
+
+
+cueconvert
+----------
+
+DESCRIPTION
+cueconvert reads a cue/toc file, and outputs a cue/toc file.
+
+SYNTAX
+cueconvert [-t cue|toc] -f <infile> [-t cue|toc] -f <outfile>
+
+
+cuebreakpoints
+--------------
+
+DESCRIPTION
+cuebreakpoints reads a cue/toc file, and outputs track break points in a
+format usable by shnsplit (part of the shntool package).
+
+SYNTAX
+cuebreakpoints [-t cue|toc] -f <file>
+
+
+cuerename
+---------
+
+DESCRIPTION
+cuerename renames files based on a template string using information from a
+cue/toc file.
+
+The first file is renamed to the expanded format string (for the first track),
+and so on until there are no more files or tracks.
+
+SYNTAX
+cuerename [-o options] [-v] [-t cue|toc] -f <file> file...
+
+OPTIONS
+-v				verbose; print filenames
+-o options			comma separated string of options:
+   case=none|lower|upper	perform case conversion
+   underscore			replace spaces with underscores
+   strict[=CHARS]		strict filenames (only allow safe characters),
+   				can optionally specify allowable characters
+   				(besides alphanumeric)
+   nostrict			do not use strict filenames
+   replace=FROM/TO		replace occurances of FROM with TO
+   template=TEMPLATE		set template (see Template Expansion)
+   test				test mode; do not move files, implies -v
+   notest			unset test mode
+
+Characters in replace=FROM/TO can be escaped by prefixing a '\'.  This makes it possible
+to replace a '/'.
+
+Template Expansion
+%N - number of tracks
+%n - track number
+%T - album title
+%t - track title
+%M - album message
+%m - track message
+%A - album performer
+%a - track performer
+%G - album genre
+%g - track genre
+%F - original filename suffix (not including '.')
+%f - original filename prefix (not including '.')
+%. - '.' if original filename contains one
+
+Any other %<character> is expanded to that character.  For example, to get a
+'%', use %%.
+
+%. may expand to '.' even if strict=CHARS does not contain a '.'.
+
+"%f%.%F" will expand to the original filename, with any options (case,
+underscore, strict) applied to the prefix and suffix.
+
+Option File
+Options may also be set in ~/.cuerenamerc .  This file has rigid formatting
+requirements.  Each line may have one or more comma seperated options.  The
+options must be of the format "option[=VALUE]".  Unlike the command line
+options, the VALUE should not be quoted.
+
+Lines which begin with '#' are comments, and are ignored.
+
+Options set on the command line override those set in the option file.
+
+
+AUTHOR
+	Svend Sanjay Sorensen <ssorensen@fastmail.fm>
+
+SEE ALSO
+	Cdrdao - http://cdrdao.sourceforge.net
+	shntool - http://www.etree.org/shnutils/shntool/

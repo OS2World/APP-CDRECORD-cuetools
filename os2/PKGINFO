@@ -1,0 +1,26 @@
+PKGNAME	cuetools
+VERSION	0.5.1
+DATE	20040126
+DESC	cuetools
+DESC
+DESC	cuetools is a set of utilities for working with cue files and toc files
+DESC	cueconvert:	convert between cue and toc formats
+DESC	cuebreakpoints:	output track break points from a cue/toc file, in a
+DESC	                format usable by shnsplit (part of the shntool package)
+DESC	cuerename:	rename files based on a template
+DESC	http://cuetools.sourceforge.net/
+CONTACT	e404@gmx.net
+DIR	usr bin bin 444
+DIR	usr/bin bin bin 444
+DIR	usr/share bin bin 444
+DIR	usr/share/doc bin bin 444
+DIR	usr/share/doc/cuetools bin bin 444
+FILE	usr/bin/cuebreakpoints.exe bin bin 755
+FILE	usr/bin/cueconvert.exe bin bin 755
+FILE	usr/bin/cuerename.exe bin bin 755
+FILE	usr/share/doc/cuetools/COPYING bin bin 444
+FILE	usr/share/doc/cuetools/EXAMPLE.cuerenamerc  bin bin 444
+FILE	usr/share/doc/cuetools/EXAMPLE.useage  bin bin 444
+FILE	usr/share/doc/cuetools/README bin bin 444
+FILE	usr/share/doc/cuetools/README.formats bin bin 444
+
